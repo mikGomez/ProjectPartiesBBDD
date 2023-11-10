@@ -1,0 +1,70 @@
+﻿<Window x:Class="ProjectPartiesBBDD.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjectPartiesBBDD"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid>
+            <TextBlock TextWrapping="Wrap" Text="MADRID ELECTIONS" Margin="246,37,67,310" FontSize="50" OpacityMask="Black" FontWeight="Bold" FontStyle="Italic"/>
+            <Image HorizontalAlignment="Left" Height="101" Margin="10,23,0,0" VerticalAlignment="Top" Width="149" Source="dibujo.png"/>
+        </Grid>
+        <StackPanel Margin="0,147,0,0" >
+            <TabControl TabStripPlacement="Left" RenderTransformOrigin="0.495,0.484" Height="259" Width="653" Name="Control" >
+                <TabItem Header="Previous Data" FontSize="20">
+                    <Grid>
+                        <TextBlock HorizontalAlignment="Left" Margin="84,34,0,0" TextWrapping="Wrap" Text="POPULATION" VerticalAlignment="Top" Height="39" Width="127" FontWeight="Bold"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="10,76,0,0" TextWrapping="Wrap" Text="ABSTENTIONS VOTES" VerticalAlignment="Top" Height="50" Width="211" FontWeight="Bold"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="94,117,0,0" TextWrapping="Wrap" Text="NULL VOTES" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Button Content="SAVE" HorizontalAlignment="Center" Margin="0,191,0,0" VerticalAlignment="Top" Height="30" Width="105" Click="savePob" FontWeight="Bold" FontStyle="Italic" Background="#FF0C0B0B" Foreground="#FFF7F7F7"/>
+                        <TextBox x:Name="tvAbsten" Text="{Binding pobla}" HorizontalAlignment="Left" Margin="248,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                        <TextBox x:Name="tvNullVotes" Text="{Binding absten}" HorizontalAlignment="Left" Margin="248,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                        <TextBox x:Name="tvPobla" Text="{Binding nullVotes}"  HorizontalAlignment="Left" Margin="248,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="item2"  Header="Parties Managment" FontSize="20"  IsEnabled="False" Margin="-2,-2,0,2">
+                    <Grid Margin="0,0,0,1" Width="482">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="97*"/>
+                            <ColumnDefinition Width="63*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid x:Name="dgvParties" FontSize="15" AutoGenerateColumns="False" IsReadOnly="True" Margin="5,0,5,78" SelectionChanged="dgvParties_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Acronym" Width="88" FontSize="15" Binding="{Binding acronym}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Name" Width="70" FontSize="15" Binding="{Binding name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="President" Width="*" FontSize="15" Binding="{Binding president}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Vertical" Margin="292,0,0,0" Grid.ColumnSpan="2">
+                            <Grid Height="36" Width="98">
+                                <TextBlock TextWrapping="Wrap" Text="Name:" Margin="-22,62,-20,-57" FontWeight="Bold" FontStyle="Italic"/>
+                                <TextBox x:Name="txtAcronym" FontSize="15" Margin="-23,30,-21,-21"></TextBox>
+                                <Button x:Name="btnSave" Background="#FF050505" Foreground="#FF111010" IsEnabled="False" Content="Save" Click="btnSave_Click" RenderTransformOrigin="0.503,0.512" Margin="-1,197,1,-197" FontWeight="Bold" FontStyle="Italic"/>
+                                <TextBox x:Name="txtPresident" FontSize="15" Margin="-22,165,-20,-156"/>
+                                <TextBox x:Name="txtName" FontSize="15" Margin="-22,98,-20,-88"/>
+                                <TextBlock TextWrapping="Wrap" Text="President:" Margin="-22,129,-20,-124" FontWeight="Bold" FontStyle="Italic"/>
+                                <TextBlock TextWrapping="Wrap" Text="Acronym:" Margin="-22,-1,-20,6" FontWeight="Bold" FontStyle="Italic"/>
+                            </Grid>
+                        </StackPanel>
+                        <Button x:Name="btnDelete" IsEnabled="False" Content="Delete" Click="btnDelete_Click" HorizontalAlignment="Center" Margin="0,196,0,0" VerticalAlignment="Top" Height="34" Width="92" FontWeight="Bold" FontStyle="Italic" Background="#FF050505" Foreground="#FF111010"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="item3" Header="Simulation" FontSize="20"  IsEnabled="False">
+                    <Grid>
+                        <DataGrid x:Name="dgvParties2" FontSize="15" AutoGenerateColumns="False" IsReadOnly="True" Margin="40,0,39,51" SelectionChanged="dgvParties_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Party" Width="150" FontSize="15" Binding="{Binding name}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Votes" Width="120" FontSize="15" Binding="{Binding validVot}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Seats" Width="*" FontSize="15" Binding="{Binding seat}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="Simulate" HorizontalAlignment="Left" Margin="40,207,0,0" VerticalAlignment="Top" Height="36" Width="127" RenderTransformOrigin="0.498,0.559" FontWeight="Bold" FontStyle="Italic" Background="#FF0C0B0B" Foreground="#FFF3F3F3" Click="btnSimulate_"/>
+                    </Grid>
+
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
+</Window>
