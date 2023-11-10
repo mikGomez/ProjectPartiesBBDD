@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -7,45 +8,61 @@ using System.Threading.Tasks;
 
 namespace ProjectPartiesBBDD.Domain
 {
-    internal class Partie
+    public class Partie
     {
         #region Propiedades
-
-        private string _acronym;
-        public string Acronym
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private String _acronym = "";
+        private String _name = "";
+        private String _president = "";
+        private int _validVot = 0;
+        private int _seat = 0;
+        public String acronym
         {
             get { return _acronym; }
-            set { _acronym = value; }
+            set
+            {
+                _acronym = value;
+                OnPropertyChange("acronym");
+            }
         }
-
-        private string _name;
-        public string Name
+        public String name
         {
             get { return _name; }
-            set { _name = value; }
+            set
+            {
+                _name = value;
+                OnPropertyChange("name");
+            }
         }
 
-        private string _president;
-        public string President
+        public String president
         {
             get { return _president; }
-            set { _president = value; }
+            set
+            {
+                _president = value;
+                OnPropertyChange("president");
+            }
         }
-
-        private int _validVot;
-        public int ValidVot
+        public int validVot
         {
             get { return _validVot; }
-            set { _validVot = value; }
+            set
+            {
+                _validVot = value;
+                OnPropertyChange("validVot");
+            }
         }
-
-        private int _seat;
-        public int Seat
+        public int seat
         {
             get { return _seat; }
-            set { _seat = value; }
+            set
+            {
+                _seat = value;
+                OnPropertyChange("seat");
+            }
         }
-
         #endregion
 
         private void OnPropertyChange(string propertyName)

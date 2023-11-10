@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Windows.Controls;
 using ProjectPartiesBBDD.DB;
 using ProjectPartiesBBDD.Domain;
 
@@ -16,7 +17,7 @@ namespace ProjectPartiesBBDD.ViewModel
         //Declaro la constante para la conexión a la BDD
         private const String cnstr = "server=localhost;uid=miguel;pwd=miguel;database=parties";
         //Modelo de la lista de registros a mostrar
-        private ObservableCollection<Partie> _parties;
+        private ObservableCollection<Partie> _party;
         private String _acronym = "";
         private String _name = "";
         private String _president = "";
@@ -25,41 +26,59 @@ namespace ProjectPartiesBBDD.ViewModel
         #endregion
 
         #region OBJETOS
-        public ObservableCollection<Partie> Partie
+        public ObservableCollection<Partie> listPart
         {
-            get { return _parties; }
+            get { return _party; }
             set
             {
-                _parties = value;
-                OnPropertyChange("users");
+                _party = value;
+                OnPropertyChange("party");
+            }
+        }  
+        public String acronym
+        {
+            get { return _acronym; }
+            set
+            {
+                _acronym = value;
+                OnPropertyChange("acronym");
             }
         }
-        public String userName
+        public String name
         {
-            get { return _user; }
+            get { return _name; }
             set
             {
-                _user = value;
-                OnPropertyChange("user");
-            }
-        }
-        public String mail
-        {
-            get { return _mail; }
-            set
-            {
-                _mail = value;
-                OnPropertyChange("mail");
+                _name = value;
+                OnPropertyChange("name");
             }
         }
 
-        public String age
+        public String president
         {
-            get { return _age; }
+            get { return _president; }
             set
             {
-                _age = value;
-                OnPropertyChange("age");
+                _president = value;
+                OnPropertyChange("president");
+            }
+        }
+        public int validVot
+        {
+            get { return _validVot; }
+            set
+            {
+                _validVot = value;
+                OnPropertyChange("validVot");
+            }
+        }
+        public int seat
+        {
+            get { return _seat; }
+            set
+            {
+                _seat = value;
+                OnPropertyChange("seat");
             }
         }
         #endregion
@@ -72,7 +91,7 @@ namespace ProjectPartiesBBDD.ViewModel
 
         public void NewUser()
         {
-            String SQL = $"INSERT INTO usuarios (usuario, mail, edad) VALUES ('{userName}','{mail}', '{age}');";
+            String SQL = $"INSERT INTO party (acronym, name, president, validVot, seat) VALUES ('{acronym}','{name}', '{president}','{validVot}', '{seat}');";
             //usaremos las clases de la librería de MySQL para ejecutar queries
             //Instalar el paqueta MySQL.Data
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
@@ -80,7 +99,12 @@ namespace ProjectPartiesBBDD.ViewModel
 
         public void UpdateUser()
         {
-            String SQL = $"UPDATE usuarios SET mail = '{mail}', edad = '{age}' WHERE usuario = '{userName}';";
+            String SQL = $"UPDATE party SET acronym = '{acronym}', president = '{president}, 'validVot = '{validVot}', seat = '{seat}' WHERE name = '{name}';";
+            MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
+        }
+        public void DeleteUser()
+        {
+            String SQL = $"Delete FROM party WHERE name = '{name}';";
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
         }
 
@@ -90,16 +114,16 @@ namespace ProjectPartiesBBDD.ViewModel
             DataTable dt = MySQLDataManagement.LoadData(SQL, cnstr);
             if (dt.Rows.Count > 0)
             {
-                if (Parties == null) Parties = new ObservableCollection<Partie>();
+                if (listPart == null) listPart = new ObservableCollection<Partie>();
                 foreach (DataRow i in dt.Rows)
                 {
-                    Parties.Add(new Partie
+                    listPart.Add(new Partie
                     {
-                        _acronym = i[0].ToString(),
-                        _name = i[0].ToString(),
-                        _president = i[0].ToString(),
-                        _validVot = i[0].ToString(),
-                        _seat = i[0].ToString()
+                        acronym = i[0].ToString(),
+                        name = i[0].ToString(),
+                        president = i[0].ToString(),
+                        validVot = int.Parse((string)i[0]),
+                        seat = int.Parse((string)i[0])
                     });
                 }
             }
