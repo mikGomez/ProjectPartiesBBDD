@@ -135,11 +135,14 @@ namespace ProjectPartiesBBDD
                     MessageBox.Show("Ya existe ese partido", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return; 
                 }
-                modelView.acronym = txtAcronym.Text;
-                modelView.name = txtName.Text;
-                modelView.president = txtPresident.Text;
-                modelView.validVot = 0;
-                modelView.seat = 0;
+                modelView.listPart.Add(new Partie
+                {
+                    acronym = txtAcronym.Text,
+                    name = txtName.Text,
+                    president = txtPresident.Text,
+                    validVot = 0,
+                    seat = 0
+                });
 
                 // Agregamos nuevo partidp
                 modelView.NewUser();
@@ -148,20 +151,20 @@ namespace ProjectPartiesBBDD
                 txtName.Text = "";
                 txtPresident.Text = "";
 
-                dgvParties.Items.Refresh();
-
                 btnSave.Foreground = new SolidColorBrush(Colors.Black);
                 btnSave.IsEnabled = false;
 
                 // Agregamos votos en blanco si tenemos 10 partidos
                 if (modelView.listPart.Count == 10)
                 {
-                    modelView.acronym = "VB";
-                    modelView.name = "Votos blanco";
-                    modelView.president = "Ninguno";
-                    modelView.validVot = 0;
-                    modelView.seat = 0;
-
+                    modelView.listPart.Add(new Partie
+                    {
+                        acronym = "VB",
+                        name = "Votos blanco",
+                        president = "Ninguno",
+                        validVot = 0,
+                        seat = 0
+                    });
                     // Agregamos votos en blanco a la base de datos
                     modelView.NewUser();
                 }
@@ -195,8 +198,6 @@ namespace ProjectPartiesBBDD
                     modelView.name = lastParty.name;
                     modelView.DeleteUser();
                 }
-
-                dgvParties.Items.Refresh();
 
                 if (dgvParties.Items.Count < 11)
                 {

@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace ProjectPartiesBBDD.Domain
 {
-    public class Partie
+    public class Partie : INotifyPropertyChanged
     {
         #region Propiedades
+        //Cuando un atributo cambie, se actualiza
         public event PropertyChangedEventHandler? PropertyChanged;
         private String _acronym = "";
         private String _name = "";

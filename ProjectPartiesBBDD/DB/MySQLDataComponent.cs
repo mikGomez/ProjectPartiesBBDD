@@ -24,11 +24,8 @@ namespace ProjectPartiesBBDD.DB
             DataTable dt = new DataTable();
             MySqlDataAdapter da = new MySqlDataAdapter(SQL, con);
             da.Fill(dt);
-            if (dt.Rows.Count > 0)
-            { 
-                da.Dispose();
-                con.Close();
-            }
+            da.Dispose();
+            con.Close();
             return dt;
         }
     }

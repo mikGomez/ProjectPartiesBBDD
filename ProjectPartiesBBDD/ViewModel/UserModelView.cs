@@ -98,7 +98,7 @@ namespace ProjectPartiesBBDD.ViewModel
 
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
             // Para que cargue si hemos agregao nuevo usuario
-            LoadUsers();
+            //LoadUsers();
         }
 
         public void UpdateUser()
