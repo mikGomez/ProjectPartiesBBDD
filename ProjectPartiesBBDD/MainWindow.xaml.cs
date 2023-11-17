@@ -99,6 +99,17 @@ namespace ProjectPartiesBBDD
                 poblation.calcularValidos(nuV, abs, po);
                 MessageBox.Show("Guardado\n", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
                 Control.SelectedIndex = 1;
+                if (modelView.listPart.Count >= 10)
+                {
+                    int cont = 1;
+                    foreach (Partie partie in modelView.listPart)
+                    {
+                        calculateValidVotes(partie, cont, poblation.votesValid);
+                        cont++;
+                    }
+                    item2.IsEnabled = true;
+                    item3.IsEnabled = true;
+                }
             }
             else
             {
@@ -178,6 +189,12 @@ namespace ProjectPartiesBBDD
                     modelView.acronym = "";
                     modelView.name = "";
                     modelView.president = "";
+                    int cont = 1;
+                    foreach (Partie partie in modelView.listPart)
+                    {
+                        calculateValidVotes(partie, cont, poblation.votesValid);
+                        cont++;
+                    }
                 }
 
                 // Como agregamos en la ult posicion votos en blanco tendremos 11 y activara la nueva pestaña
@@ -223,12 +240,6 @@ namespace ProjectPartiesBBDD
         //Boton para simular los escaños
         private void btnSimulate_(object sender, RoutedEventArgs e)
         {
-            int cont = 1;
-            foreach (Partie partie in modelView.listPart)
-            {
-                calculateValidVotes(partie, cont, poblation.votesValid);
-                cont++;
-            }
             const int ESCANIOS = 37;
             List<Partie> partiesClon = new List<Partie>();
             List<Partie> partiesRemove = new List<Partie>();
