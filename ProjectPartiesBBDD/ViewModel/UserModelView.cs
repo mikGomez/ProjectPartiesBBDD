@@ -100,18 +100,15 @@ namespace ProjectPartiesBBDD.ViewModel
             // Para que cargue si hemos agregao nuevo usuario
             //LoadUsers();
         }
-
         public void UpdateUser()
         {
-            String SQL = $"UPDATE party SET acronym = '{acronym}', president = '{president}', 'validVot = '{validVot}', seat = '{seat}' WHERE name = '{name}';";
+            String SQL = $"UPDATE party SET acronym = '{acronym}', president = '{president}', validVot = '{validVot}', seat = '{seat}' WHERE name = '{name}';";
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
         }
         public void DeleteUser()
         {
             String SQL = $"Delete FROM party WHERE name = '{name}';";
             MySQLDataManagement.ExecuteNonQuery(SQL, cnstr);
-            // Para que cargue si hemos borrao nuevo usuario
-            LoadUsers();
         }
 
         public void LoadUsers()
@@ -129,7 +126,6 @@ namespace ProjectPartiesBBDD.ViewModel
             }
             if (dt.Rows.Count > 0)
             {
-                if (listPart == null) listPart = new ObservableCollection<Partie>();
                 // Cambiamos para recorrer las filas, y asiganr segun la posicion donde este
                 foreach (DataRow i in dt.Rows)
                 {

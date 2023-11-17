@@ -40,10 +40,10 @@
                         <StackPanel Orientation="Vertical" Margin="292,0,0,0" Grid.ColumnSpan="2">
                             <Grid Height="36" Width="98">
                                 <TextBlock TextWrapping="Wrap" Text="Name:" Margin="-22,62,-20,-57" FontWeight="Bold" FontStyle="Italic"/>
-                                <TextBox x:Name="txtAcronym" FontSize="15" Margin="-23,30,-21,-21"></TextBox>
+                                <TextBox x:Name="txtAcronym" Text="{Binding acronym, Mode=TwoWay}" FontSize="15" Margin="-23,30,-21,-21" ></TextBox>
                                 <Button x:Name="btnSave" Background="#FF050505" Foreground="#FF111010" IsEnabled="False" Content="Save" Click="btnSave_Click" RenderTransformOrigin="0.503,0.512" Margin="-1,197,1,-197" FontWeight="Bold" FontStyle="Italic"/>
-                                <TextBox x:Name="txtPresident" FontSize="15" Margin="-22,165,-20,-156"/>
-                                <TextBox x:Name="txtName" FontSize="15" Margin="-22,98,-20,-88"/>
+                                <TextBox x:Name="txtPresident" Text="{Binding president, Mode=TwoWay}" FontSize="15" Margin="-22,165,-20,-156" />
+                                <TextBox x:Name="txtName" Text="{Binding name, Mode=TwoWay}" FontSize="15" Margin="-22,98,-20,-88"/>
                                 <TextBlock TextWrapping="Wrap" Text="President:" Margin="-22,129,-20,-124" FontWeight="Bold" FontStyle="Italic"/>
                                 <TextBlock TextWrapping="Wrap" Text="Acronym:" Margin="-22,-1,-20,6" FontWeight="Bold" FontStyle="Italic"/>
                             </Grid>

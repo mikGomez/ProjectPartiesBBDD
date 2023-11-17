@@ -1,4 +1,5 @@
-﻿using ProjectPartiesBBDD.Domain;
+﻿using ProjectPartiesBBDD.DB;
+using ProjectPartiesBBDD.Domain;
 using ProjectPartiesBBDD.ViewModel;
 using ProyectoPoblacion.Domain;
 using System;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace ProjectPartiesBBDD
 {
@@ -31,13 +33,13 @@ namespace ProjectPartiesBBDD
         public MainWindow()
         {
             InitializeComponent();
+            poblation = new Dates();
+            this.DataContext = poblation;
             DataContext = modelView;
             //Cargamos los datos existentes en la BDD
             modelView.LoadUsers();
             Loaded += calPoblation;
-            tvAbsten.TextChanged += calPoblation;
-            poblation = new Dates();
-            this.DataContext = poblation;
+            tvAbsten.TextChanged += calPoblation;  
             dgvParties.ItemsSource = modelView.listPart;
             dgvParties2.ItemsSource = modelView.listPart;
             txtPresident.TextChanged += txtName_changed;
@@ -137,9 +139,9 @@ namespace ProjectPartiesBBDD
                 }
                 modelView.listPart.Add(new Partie
                 {
-                    acronym = txtAcronym.Text,
-                    name = txtName.Text,
-                    president = txtPresident.Text,
+                    acronym = modelView.acronym,
+                    name = modelView.name,
+                    president = modelView.president,
                     validVot = 0,
                     seat = 0
                 });
@@ -147,9 +149,9 @@ namespace ProjectPartiesBBDD
                 // Agregamos nuevo partidp
                 modelView.NewUser();
 
-                txtAcronym.Text = "";
-                txtName.Text = "";
-                txtPresident.Text = "";
+                modelView.acronym = "";
+                modelView.name = "";
+                modelView.president = "";
 
                 btnSave.Foreground = new SolidColorBrush(Colors.Black);
                 btnSave.IsEnabled = false;
@@ -165,8 +167,17 @@ namespace ProjectPartiesBBDD
                         validVot = 0,
                         seat = 0
                     });
+                    modelView.acronym = "VB";
+                    modelView.name = "Votos blanco";
+                    modelView.president = "Ninguno";
+                    modelView.validVot = 0;
+                    modelView.seat = 0;
                     // Agregamos votos en blanco a la base de datos
                     modelView.NewUser();
+
+                    modelView.acronym = "";
+                    modelView.name = "";
+                    modelView.president = "";
                 }
 
                 // Como agregamos en la ult posicion votos en blanco tendremos 11 y activara la nueva pestaña
@@ -190,6 +201,7 @@ namespace ProjectPartiesBBDD
                 {
                     modelView.name = partie.name;
                     modelView.DeleteUser();
+                    modelView.listPart.Remove(partie);
                 }
                 // Si existe votos en blanco que lo borre, para que sea en la ultima fila donde se coloque
                 Partie lastParty = modelView.listPart.LastOrDefault();
@@ -197,7 +209,10 @@ namespace ProjectPartiesBBDD
                 {
                     modelView.name = lastParty.name;
                     modelView.DeleteUser();
+                    modelView.listPart.Remove(lastParty);
                 }
+
+                modelView.name = "";
 
                 if (dgvParties.Items.Count < 11)
                 {
@@ -208,8 +223,105 @@ namespace ProjectPartiesBBDD
         //Boton para simular los escaños
         private void btnSimulate_(object sender, RoutedEventArgs e)
         {
-            
-        }
+            int cont = 1;
+            foreach (Partie partie in modelView.listPart)
+            {
+                calculateValidVotes(partie, cont, poblation.votesValid);
+                cont++;
+            }
+            const int ESCANIOS = 37;
+            List<Partie> partiesClon = new List<Partie>();
+            List<Partie> partiesRemove = new List<Partie>();
 
+            foreach (Partie party in modelView.listPart)
+            {
+                party.seat = 0;
+                Partie partyClone = new Partie
+                {
+                    name = party.name,
+                    validVot = party.validVot,
+                    seat = party.seat
+                };
+
+                if (partyClone.validVot < (0.03 * poblation.votesValid))
+                {
+                    partiesRemove.Add(partyClone);
+                }
+                else
+                {
+                    partiesClon.Add(partyClone);
+                }
+            }
+
+            foreach (Partie partyToRemove in partiesRemove)
+            {
+                partiesClon.Remove(partyToRemove);
+            }
+            int aux = 0;
+            for (int i = 0; i < ESCANIOS; i++)
+            {
+                for (int j = 0; j < partiesClon.Count; j++)
+                {
+                    if (j == 0)
+                    {
+                        aux = 0;
+                    }
+                    else
+                    {
+                        if (partiesClon[j].validVot > partiesClon[aux].validVot)
+                        {
+                            aux = j;
+                        }
+                    }
+                }
+                modelView.listPart[aux].seat += 1;
+                modelView.UpdateUser();
+                int num = modelView.listPart[aux].validVot;
+                partiesClon[aux].validVot = num / (modelView.listPart[aux].seat + 1);
+            }
+            dgvParties2.Items.Refresh();
+        }
+        private void calculateValidVotes(Partie p, int opc, int poblationVotesValid)
+        {
+            switch (opc)
+            {
+                case 1:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.3525);
+                    break;
+                case 2:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.2475);
+                    break;
+                case 3:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.1575);
+                    break;
+                case 4:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.1425);
+                    break;
+                case 5:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.0375);
+                    break;
+                case 6:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.0325);
+                    break;
+                case 7:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.015);
+                    break;
+                case 8:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.005);
+                    break;
+                case 9:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.0025);
+                    break;
+                case 10:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.0025);
+                    break;
+                case 11:
+                    p.validVot = (int)Math.Ceiling(poblationVotesValid * 0.005);
+                    break;
+                default:
+                    Console.WriteLine("Opción no válida");
+                    break;
+            }
+        }
     }
 }
