@@ -26,17 +26,18 @@ namespace ProjectPartiesBBDD
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Dates poblation { get; set; }
+        public Dates poblation;
         const System.String POBLACION_MADRID = "6.921.267";
         private UserModelView modelView = new UserModelView();
+        private PartiesDates modelDates = new PartiesDates();
 
         public MainWindow()
         {
             InitializeComponent();
             poblation = new Dates();
-            this.DataContext = poblation;
+            modelDates.LoadUsers(poblation);
+            PreviousData.DataContext = poblation;
             DataContext = modelView;
-            //Cargamos los datos existentes en la BDD
             modelView.LoadUsers();
             Loaded += calPoblation;
             tvAbsten.TextChanged += calPoblation;  
@@ -82,12 +83,16 @@ namespace ProjectPartiesBBDD
                     else
                     {
                         MessageBox.Show("Number Absten is bigger than number Poblation", "Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                        tvAbsten.Text = "";
+                        tvNullVotes.Text = "";
                     }
                 }
             }
             else
             {
                 MessageBox.Show("Enter numbers", "Number", MessageBoxButton.OK, MessageBoxImage.Error);
+                tvAbsten.Text = "";
+                tvNullVotes.Text = "";
             }
         }
         //Guardar numero
@@ -97,6 +102,11 @@ namespace ProjectPartiesBBDD
             {
                 poblation = new Dates(po, abs, nuV);
                 poblation.calcularValidos(nuV, abs, po);
+                modelDates.pobla = po;
+                modelDates.absten = abs;
+                modelDates.nullVotes = nuV;
+                modelDates.votesV = poblation.votesV;
+                modelDates.UpadateOrNew();
                 MessageBox.Show("Guardado\n", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
                 Control.SelectedIndex = 1;
                 if (modelView.listPart.Count >= 10)
@@ -104,7 +114,7 @@ namespace ProjectPartiesBBDD
                     int cont = 1;
                     foreach (Partie partie in modelView.listPart)
                     {
-                        calculateValidVotes(partie, cont, poblation.votesValid);
+                        calculateValidVotes(partie, cont, poblation.votesV);
                         cont++;
                     }
                     item2.IsEnabled = true;
@@ -192,9 +202,17 @@ namespace ProjectPartiesBBDD
                     int cont = 1;
                     foreach (Partie partie in modelView.listPart)
                     {
-                        calculateValidVotes(partie, cont, poblation.votesValid);
+                        calculateValidVotes(partie, cont, poblation.votesV);
+                        modelView.acronym = partie.acronym;
+                        modelView.name = partie.name;
+                        modelView.president = partie.president;
+                        modelView.validVot = partie.validVot;
+                        modelView.seat = partie.seat;
+                        modelView.validVot = partie.validVot;
+                        modelView.UpdateUser();
                         cont++;
                     }
+                    
                 }
 
                 // Como agregamos en la ult posicion votos en blanco tendremos 11 y activara la nueva pestaña
@@ -203,7 +221,6 @@ namespace ProjectPartiesBBDD
                     Control.SelectedIndex = 2;
                     item2.IsEnabled = true;
                     item3.IsEnabled = true;
-                    dgvParties2.Items.Refresh();
                 }
             }
         }
@@ -254,7 +271,7 @@ namespace ProjectPartiesBBDD
                     seat = party.seat
                 };
 
-                if (partyClone.validVot < (0.03 * poblation.votesValid))
+                if (partyClone.validVot < (0.03 * poblation.votesV))
                 {
                     partiesRemove.Add(partyClone);
                 }
@@ -286,11 +303,16 @@ namespace ProjectPartiesBBDD
                     }
                 }
                 modelView.listPart[aux].seat += 1;
-                modelView.UpdateUser();
                 int num = modelView.listPart[aux].validVot;
                 partiesClon[aux].validVot = num / (modelView.listPart[aux].seat + 1);
+                modelView.acronym = modelView.listPart[aux].acronym;
+                modelView.name = modelView.listPart[aux].name;
+                modelView.president = modelView.listPart[aux].president;
+                modelView.validVot = modelView.listPart[aux].validVot;
+                modelView.seat = modelView.listPart[aux].seat;
+                modelView.validVot = modelView.listPart[aux].validVot;
+                modelView.UpdateUser();
             }
-            dgvParties2.Items.Refresh();
         }
         private void calculateValidVotes(Partie p, int opc, int poblationVotesValid)
         {

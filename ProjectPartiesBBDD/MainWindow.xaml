@@ -13,15 +13,15 @@
         </Grid>
         <StackPanel Margin="0,147,0,0" >
             <TabControl TabStripPlacement="Left" RenderTransformOrigin="0.495,0.484" Height="259" Width="653" Name="Control" >
-                <TabItem Header="Previous Data" FontSize="20">
+                <TabItem Name ="PreviousData" Header="Previous Data" FontSize="20">
                     <Grid>
                         <TextBlock HorizontalAlignment="Left" Margin="84,34,0,0" TextWrapping="Wrap" Text="POPULATION" VerticalAlignment="Top" Height="39" Width="127" FontWeight="Bold"/>
                         <TextBlock HorizontalAlignment="Left" Margin="10,76,0,0" TextWrapping="Wrap" Text="ABSTENTIONS VOTES" VerticalAlignment="Top" Height="50" Width="211" FontWeight="Bold"/>
                         <TextBlock HorizontalAlignment="Left" Margin="94,117,0,0" TextWrapping="Wrap" Text="NULL VOTES" VerticalAlignment="Top" FontWeight="Bold"/>
                         <Button Content="SAVE" HorizontalAlignment="Center" Margin="0,191,0,0" VerticalAlignment="Top" Height="30" Width="105" Click="savePob" FontWeight="Bold" FontStyle="Italic" Background="#FF0C0B0B" Foreground="#FFF7F7F7"/>
-                        <TextBox x:Name="tvAbsten" Text="{Binding pobla}" HorizontalAlignment="Left" Margin="248,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
-                        <TextBox x:Name="tvNullVotes" Text="{Binding absten}" HorizontalAlignment="Left" Margin="248,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
-                        <TextBox x:Name="tvPobla" Text="{Binding nullVotes}"  HorizontalAlignment="Left" Margin="248,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                        <TextBox x:Name="tvAbsten" Text="{Binding absten,Mode=TwoWay}" HorizontalAlignment="Left" Margin="248,78,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                        <TextBox x:Name="tvNullVotes" Text="{Binding nullVotes,Mode=TwoWay}" HorizontalAlignment="Left" Margin="248,119,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
+                        <TextBox x:Name="tvPobla" Text="{Binding pobla,Mode=TwoWay}"  HorizontalAlignment="Left" Margin="248,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" Height="25"/>
                     </Grid>
                 </TabItem>
                 <TabItem Name="item2"  Header="Parties Managment" FontSize="20"  IsEnabled="False" Margin="-2,-2,0,2">
